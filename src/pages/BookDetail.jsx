@@ -15,36 +15,37 @@ export default function BookDetail() {
 
   useEffect(() => {
     setLoading(true);
-    getBookById(id).then(res => {
-      setBook(res);
+    getBookById(id).then(b => {
+      setBook(b);
       setLoading(false);
-    }).catch(err => {
-      console.error(err);
-      setError("Failed to load book.");
+    }).catch(() => {
+      setError("Could not load the book.");
       setLoading(false);
     });
   }, [id]);
 
   function addToFavorites() {
     if (!book) return;
-    const already = favorites.find(f => f.id === book.id);
-    if (already) return;
-    setFavorites([ ...favorites, { id: book.id, title: book.title, authors: book.authors, thumbnail: book.thumbnail } ]);
+    if (favorites.find(f => f.id === book.id)) return;
+    setFavorites([...favorites, { id: book.id, title: book.title, authors: book.authors, thumbnail: book.thumbnail }]);
   }
 
   if (loading) return <Loader />;
   if (error) return <ErrorMessage message={error} />;
-
   if (!book) return <p>Book not found.</p>;
 
   return (
-    <div>
-      <button onClick={() => navigate(-1)} className="mb-4">← Back</button>
+    <div className="pb-20">
+      <button onClick={() => navigate(-1)} className="mb-4 text-sm text-gray-700">← Back</button>
 
-      <h1 className="text-2xl font-semibold mb-4">{book.title}</h1>
+      <h1 className="text-xl font-semibold mb-3 text-center">{book.title}</h1>
 
       <div className="w-full rounded-xl overflow-hidden mb-4">
-        <img src={book.thumbnail || ""} alt={book.title} className="w-full object-cover" />
+        {book.thumbnail ? (
+          <img src={book.thumbnail} alt={book.title} className="w-full h-56 object-cover rounded-xl" />
+        ) : (
+          <div className="h-56 bg-gray-100 rounded-xl" />
+        )}
       </div>
 
       <div className="text-center mb-4">
@@ -54,7 +55,7 @@ export default function BookDetail() {
 
       <p className="text-sm leading-relaxed mb-6">{book.description || "No description available."}</p>
 
-      <button onClick={addToFavorites} className="w-full py-3 rounded-xl bg-accent text-white">
+      <button onClick={addToFavorites} className="w-full py-3 rounded-xl bg-chip text-white font-medium">
         Add to Favourites
       </button>
     </div>

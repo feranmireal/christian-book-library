@@ -2,10 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* small global tweaks */
+/* basic app-level styles */
+:root{
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --font-serif: "Playfair Display", Georgia, serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap');
+
+html,body,#root { height: 100%; }
 body {
-  background-color: #f9fafb; /* equivalent to bg-gray-50 */
-  color: #111827; /* equivalent to text-gray-900 */
-  -webkit-font-smoothing: antialiased;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-family: var(--font-sans);
+  background-color: theme('colors.bgapp');
+  color: theme('colors.gray.900');
+}
+
+/* small utilities for the design */
+.header-title {
+  font-family: var(--font-serif);
+}
+.chip {
+  background-color: theme('colors.chip');
+  color: white;
+}
+.round-btn {
+  border-radius: 9999px;
 }

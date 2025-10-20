@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import SearchBar from "../components/SearchBar";
+import CategoryChips from "../components/CategoryChips";
 import BookList from "../components/BookList";
-import { searchBooks } from "../utils/booksApi";
 import Loader from "../components/Loader";
 import ErrorMessage from "../components/ErrorMessage";
+import { searchBooks } from "../utils/booksApi";
 
 export default function Home() {
   const [books, setBooks] = useState([]);
+  const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [query, setQuery] = useState("");
 
-  async function handleSearch(q) {
+  async function doSearch(q) {
     setQuery(q);
     if (!q || q.trim() === "") {
       setBooks([]);
@@ -20,40 +21,25 @@ export default function Home() {
     setLoading(true);
     setError("");
     try {
-      const results = await searchBooks(q);
-      setBooks(results);
+      const res = await searchBooks(q);
+      setBooks(res);
     } catch (err) {
-      console.error(err);
-      setError("Failed to fetch books. Try again.");
+      setError("Failed to fetch books. Try again later.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div>
-      <SearchBar onSearch={handleSearch} />
-      <div className="mt-3">
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {["Bible","Devotionals","Theology","Christian Living"].map(cat => (
-            <button
-              key={cat}
-              onClick={() => handleSearch(cat)}
-              className="px-4 py-2 shrink-0 rounded-full text-sm font-medium bg-chip text-white"
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </div>
+    <div className="pb-24">
+      <SearchBar onSearch={doSearch} />
+      <CategoryChips onSelect={doSearch} />
 
-      <section className="mt-6">
+      <section className="mt-5">
+        <h2 className="text-lg font-semibold mb-3">Featured Books</h2>
         {loading && <Loader />}
         {error && <ErrorMessage message={error} />}
-        {!loading && books.length === 0 && query && (
-          <p className="text-sm text-gray-500">No results for “{query}”</p>
-        )}
-        <BookList books={books} />
+        {!loading && <BookList books={books} />}
       </section>
     </div>
   );

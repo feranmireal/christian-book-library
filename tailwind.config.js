@@ -7,7 +7,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: "#f8fafc", // define your custom background
+        primary: "#4B6BFB",
+        secondary: "#E0E7FF",
+        bgapp: "#F9FAFB",  // 👈 this is the missing color
+      },
+      fontFamily: {
+        playfair: ['"Playfair Display"', "serif"],
       },
     },
   },

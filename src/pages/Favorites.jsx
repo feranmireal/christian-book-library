@@ -5,7 +5,7 @@ import BookCard from "../components/BookCard";
 export default function Favorites() {
   const [favorites] = useLocalStorage("favorites", []);
   return (
-    <div>
+    <div className="pb-20">
       <h2 className="text-xl font-semibold mb-4">Favorites</h2>
       {favorites.length === 0 ? (
         <p className="text-gray-500">You have no favorite books yet.</p>
@@ -14,11 +14,9 @@ export default function Favorites() {
           {favorites.map(f => (
             <BookCard key={f.id} book={{
               id: f.id,
-              volumeInfo: {
-                title: f.title,
-                authors: f.authors,
-                imageLinks: { thumbnail: f.thumbnail }
-              }
+              title: f.title,
+              authors: f.authors,
+              thumbnail: f.thumbnail
             }} />
           ))}
         </div>
